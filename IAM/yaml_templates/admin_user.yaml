@@ -1,0 +1,18 @@
+Resources:
+  MyUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: myAdminUser
+
+  MyIAMAdministratorAccess:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: AdministratorAccess
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: '*'
+            Resource: '*'
+      Users:
+        - !Ref MyUser
