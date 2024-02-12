@@ -80,21 +80,25 @@ def main():
     --------
         - None
     """
-    session = boto3.Session(
-        aws_access_key_id = os.getenv('ACCESS_KEY_ID'),
-        aws_secret_access_key = os.getenv('SECRET_ACCESS_KEY'),
-        region_name = os.getenv('REGION')
-    )
-    cloudformation_client = session.client('cloudformation')
-    stack_name = 'my-stack-admin-user'
-    template_file = './yaml_templates/admin_user.yaml'
-    with open(template_file, 'r') as file:
-        template_body = file.read()
-    if os.getenv('ACTION').upper() == 'CREATE':
-        response = create_cloudformation_stack(cloudformation_client, stack_name, template_body)
-    elif os.getenv('ACTION').upper() == 'UPDATE':
-        response = update_cloudformation_stack(cloudformation_client, stack_name, template_body)
-    print("Stack creado:", response)
+    try:
+        session = boto3.Session(
+            aws_access_key_id = os.getenv('ACCESS_KEY_ID'),
+            aws_secret_access_key = os.getenv('SECRET_ACCESS_KEY'),
+            region_name = os.getenv('REGION')
+        )
+        cloudformation_client = session.client('cloudformation')
+        stack_name = 'my-stack-admin-user'
+        template_file = './yaml_templates/admin_user.yaml'
+        with open(template_file, 'r') as file:
+            template_body = file.read()
+        if os.getenv('ACTION').upper() == 'CREATE':
+            response = create_cloudformation_stack(cloudformation_client, stack_name, template_body)
+            print("Stack created:", response)
+        elif os.getenv('ACTION').upper() == 'UPDATE':
+            response = update_cloudformation_stack(cloudformation_client, stack_name, template_body)
+            print("Stack modified:", response)
+    except Exception as ex:
+        print("Failed action:", ex)
 
 if __name__ == "__main__":
     main()

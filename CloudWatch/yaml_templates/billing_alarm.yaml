@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  BillingAlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint: "camilocossioalzate2001@gmail.com"
+          Protocol: "email"
+
+  BillingAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: "Alarm for exceeding $1 in estimated monthly charges"
+      Namespace: "AWS/Billing"
+      MetricName: "EstimatedCharges"
+      Dimensions:
+        - Name: "Currency"
+          Value: "USD"
+      Statistic: "Maximum"
+      Period: "21600"  # 6 hours
+      EvaluationPeriods: "1"
+      Threshold: "1"
+      ComparisonOperator: "GreaterThanThreshold"
+      AlarmActions:
+        - !Ref BillingAlarmTopic
