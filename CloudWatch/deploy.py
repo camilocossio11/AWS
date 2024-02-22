@@ -20,7 +20,7 @@ def main():
 
     Returns:
     --------
-        - None
+        - Response of opperation
     """
     try:
         session = boto3.Session(
@@ -39,8 +39,10 @@ def main():
             Capabilities=['CAPABILITY_NAMED_IAM']
         )
         print("Stack created:", response)
+        return response
     except Exception as ex:
         print("Failed action:", ex)
+        return ex
 
 if __name__ == "__main__":
     main()

@@ -78,7 +78,7 @@ def main():
 
     Returns:
     --------
-        - None
+        - Response of opeperation
     """
     try:
         session = boto3.Session(
@@ -94,11 +94,14 @@ def main():
         if os.getenv('ACTION').upper() == 'CREATE':
             response = create_cloudformation_stack(cloudformation_client, stack_name, template_body)
             print("Stack created:", response)
+            return response
         elif os.getenv('ACTION').upper() == 'UPDATE':
             response = update_cloudformation_stack(cloudformation_client, stack_name, template_body)
             print("Stack modified:", response)
+            return response
     except Exception as ex:
         print("Failed action:", ex)
+        return ex
 
 if __name__ == "__main__":
     main()
